@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronosenbourg xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="CronosScheme.xsd">
+	<listen iface="127.0.0.1" port="8888" />
+	<instance name="default" output="toto.log" interval="10" host="udev3"
+		port="44109">
+		<mbean name="jboss.system:type=ServerInfo">
+			<!--  attribute property is primary key across all mbeans objects -->
+			<attribute name="FreeMemory" property="FreeMemory"/>
+			<attribute name="TotalMemory" property="totalMemory"/>
+		</mbean>
+		<output file="toto-1.log" className="org.cronosenbourg.monitor.DefaultCSVOutput">
+			<item ind="1" propertyref="FreeMemory"/>
+			<item ind="0" propertyref="totalMemory"/>
+		</output>
+		<output file="target/toto-1.log" className="org.cronosenbourg.monitor.DefaultPropertiesOutput">
+			<oper ind="2" property="usedMemory" operator="-" arg1propertyref="totalMemory" arg2propertyref="FreeMemory"/>
+			<item ind="0" propertyref="totalMemory"/>
+		</output>
+	</instance>
+</cronosenbourg>
