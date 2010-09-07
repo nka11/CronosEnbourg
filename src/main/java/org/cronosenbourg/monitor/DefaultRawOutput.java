@@ -35,11 +35,11 @@ import org.cronosenbourg.tools.Operation;
 import org.cronosenbourg.tools.SimpleItemOper;
 
 /**
- * Class for a flat file output in property=value format, reinitialised at each measure.
+ * Class for a flat file output reinitialised at each measure.
  * 
  * @author karagni
  */
-public class DefaultPropertiesOutput implements IOutput {
+public class DefaultRawOutput implements IOutput {
 	private Logger					log			= null;
 	private String					fileName;
 	private File					outFile;
@@ -49,7 +49,7 @@ public class DefaultPropertiesOutput implements IOutput {
 	public void setParamNode(Node nodeParams) {
 		this.nodeParams = nodeParams;
 		this.fileName = (String) nodeParams.attribute("file");
-		String loggerName = DefaultPropertiesOutput.class.getName().substring(InstanceThread.class.getName().lastIndexOf(".")+1)+ ":" + this.fileName;
+		String loggerName = DefaultRawOutput.class.getName().substring(InstanceThread.class.getName().lastIndexOf(".")+1)+ ":" + this.fileName;
 		log = Logger.getLogger(loggerName);
 		for (Object param : nodeParams.children()) {
 			Node nodeParam = (Node) param;
@@ -83,16 +83,16 @@ public class DefaultPropertiesOutput implements IOutput {
 					String val = entry.getValue().getResult(record);
 					if (val == null) val = "0";
 					if (val == "") val = "0";
-					writer.write(entry.getValue().getPropertyName() + "=" +  val);
+					writer.write(val);
 				} catch (Exception e){
-					writer.write(entry.getValue().getPropertyName() + "=0");
+					writer.write("null");
 				} finally {
 					writer.newLine();
 				}
 			}
 			writer.flush();
 			writer.close();
-			log.info("Records successfully writen as properties (" + this.fileName + ")");
+			log.info("Records successfully writen as raw data (" + this.fileName + ")");
 		} catch (IOException e) {
 			log.error("I/O error while writing output" + this.fileName,e);
 		}

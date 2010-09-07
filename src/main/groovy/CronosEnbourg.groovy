@@ -3,13 +3,18 @@ import org.cronosenbourg.monitor.Daemon
 import org.cronosenbourg.monitor.MBeanBean 
 import org.cronosenbourg.monitor.OperationBean 
 
-def confFileName 
+def confFileName
 def main = new Daemon()
+
 if (args.size() == 0) {
 	confFileName = "CronosEnbourg"
 } else {
 	confFileName = args[0]
+	if (confFileName == null) {
+		confFileName = "CronosEnbourg"
+	}
 }
+println "using conf " + confFileName
 def cronosenbourg = new XmlParser().parse("src/main/resources/" + confFileName + ".xml");
 def listen = cronosenbourg.listen;
 def instances = cronosenbourg.instance;
@@ -41,7 +46,7 @@ instances.each {
 				def argumentBean = new ArgumentBean();
 				argumentBean.type=it.'@type'
 				argumentBean.value=it.'@value'
-				operationBean.arguments.add(argumentBean);
+				operationBean.arguments.put(Integer.valueOf(it.'@pos'),argumentBean);
 			}
 			mbeanbean.operations.put(it.'@property',operationBean)
 		}

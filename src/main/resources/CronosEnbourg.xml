@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Example file for CronosEnbourg -->
 <cronosenbourg xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="CronosScheme.xsd">
 	<listen iface="127.0.0.1" port="8888" />
-	<instance name="default" output="toto.log" interval="10" host="udev3"
-		port="44109">
+	<!-- target instance and port for JMX -->
+	<instance name="default" output="toto.log" interval="10" host="127.0.0.1"
+		port="8080">
+		<!-- mbean -->
 		<mbean name="jboss.system:type=ServerInfo">
 			<!--  attribute property is primary key across all mbeans objects -->
 			<attribute name="FreeMemory" property="FreeMemory"/>
 			<attribute name="TotalMemory" property="totalMemory"/>
+		</mbean>
+		<mbean name="jboss.deployment:flavor=URL,type=DeploymentScanner">
+			<!-- operation call example. -->
+			<!-- all scalar types are supported (boolean, int, float, long, double, byte, short and char -->
+			<!-- not all objects types are supported for arguments. -->
+			<!-- object that supports to be casted from java.lang.String are Ok -->
+			<!-- see org.cronosenbourg.monitor.OperationBean implementation for more info -->
+			<operation name="resumeDeployment" property="getStats">
+			<!-- this operation call is an example, operation call is performed but operation fails while executed  -->
+				<arg pos="0" type="java.net.URL" value="http://test"/>
+				<arg pos="1" type="boolean" value="True"/>
+			</operation>
 		</mbean>
 		<output file="toto-1.log" className="org.cronosenbourg.monitor.DefaultCSVOutput">
 			<item ind="1" propertyref="FreeMemory"/>

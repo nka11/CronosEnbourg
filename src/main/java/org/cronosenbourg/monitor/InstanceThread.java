@@ -129,6 +129,16 @@ public class InstanceThread extends Thread {
 						}
 						resultMap.put(attributeLibelle, result);
 					}
+					for (String operationLibelle : mBeanBean.getOperations().keySet()) {
+						String result = "";
+						OperationBean operationBean = mBeanBean.getOperations().get(operationLibelle);
+						try {
+							result = adaptor.invoke(objectName, operationBean.getName(), operationBean.getArgsValues(), operationBean.getSignature()).toString();
+							resultMap.put(operationLibelle, result);
+						} catch (Exception e) {
+							log.error("Unexpected error", e);
+						}
+					}
 				}
 				log.info("Data successfully grabed from JMX");
 			} catch (CommunicationException e) {
