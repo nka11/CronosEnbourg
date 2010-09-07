@@ -7,15 +7,15 @@ def confFileName
 def main = new Daemon()
 
 if (args.size() == 0) {
-	confFileName = "CronosEnbourg"
+	confFileName = "CronosEnbourg.xml"
 } else {
 	confFileName = args[0]
 	if (confFileName == null) {
-		confFileName = "CronosEnbourg"
+		confFileName = "CronosEnbourg.xml"
 	}
 }
 println "using conf " + confFileName
-def cronosenbourg = new XmlParser().parse("src/main/resources/" + confFileName + ".xml");
+def cronosenbourg = new XmlParser().parse(confFileName);
 def listen = cronosenbourg.listen;
 def instances = cronosenbourg.instance;
 instances.each {

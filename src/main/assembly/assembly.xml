@@ -1,0 +1,24 @@
+<assembly>
+	<id>launcher</id>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<formats>
+		<format>jar</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+			<directory>target/classes</directory>
+			<outputDirectory>/</outputDirectory>
+			<useDefaultExcludes>true</useDefaultExcludes>
+			<excludes>
+				<exclude>*.java</exclude>
+				<exclude>*.groovy</exclude>
+			</excludes>
+		</fileSet>
+	</fileSets>
+	<dependencySets>
+		<dependencySet>
+			<unpack>true</unpack>
+			<scope>runtime</scope>
+		</dependencySet>
+	</dependencySets>
+</assembly>

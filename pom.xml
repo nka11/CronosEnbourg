@@ -6,6 +6,13 @@
 	<artifactId>cronosenbourg-monitor</artifactId>
 	<name>CronosEnbourg JMX Monitoring for jBoss</name>
 	<version>0.0.1-SNAPSHOT</version>
+	<repositories>
+		<repository>
+			<id>JBoss</id>
+			<name>JBoss repository</name>
+			<url>https://repository.jboss.org/maven2</url>
+		</repository>
+	</repositories>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -13,7 +20,7 @@
 		<dependency>
 			<groupId>org.jboss.client</groupId>
 			<artifactId>jbossall-client</artifactId>
-			<version>4.0.5.GA</version>
+			<version>4.2.3.GA</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.groovy.maven.runtime</groupId>
@@ -42,6 +49,30 @@
 	</organization>
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/assembly.xml</descriptor>
+					</descriptors>
+					<finalName>cronos</finalName>
+					<archive>
+						<manifest>
+							<mainClass>CronosEnbourg</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -74,7 +105,7 @@
 						<groupId>junit</groupId>
 						<artifactId>junit</artifactId>
 						<version>3.8.1</version>
-						<scope>test</scope>
+						<scope>compile</scope>
 					</dependency>
 					<dependency>
 						<groupId>jfree</groupId>
@@ -82,19 +113,32 @@
 						<version>1.0.0</version>
 					</dependency>
 				</dependencies>
-				<!--<executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
 					<execution>
-						<phase>install</phase>
-						<goals>
-							<goal>execute</goal>
-						</goals>
+						<id>compile</id>
+						<phase>compile</phase>
 						<configuration>
-							<source>${pom.basedir}/src/main/groovy/CronosEnbourg.groovy</source>
-							<providerSelection>1.5</providerSelection>
+							<tasks>
+								<mkdir dir="${basedir}/src/main/groovy" />
+								<taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc">
+									<classpath refid="maven.compile.classpath" />
+								</taskdef>
+								<mkdir dir="${project.build.outputDirectory}" />
+								<groovyc destdir="${project.build.outputDirectory}"
+									srcdir="${basedir}/src/main/groovy/" listfiles="true">
+									<classpath refid="maven.compile.classpath" />
+								</groovyc>
+							</tasks>
 						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
 					</execution>
 				</executions>
-			--></plugin>
+			</plugin>
 		</plugins>
 	</build>
 </project>
