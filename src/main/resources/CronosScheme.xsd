@@ -17,20 +17,21 @@
   <xs:element name="instance">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="mbean"/>
-        <xs:element maxOccurs="unbounded" ref="output"/>
+        <xs:element ref="mbean" maxOccurs="unbounded"/>
+        <xs:element ref="output" maxOccurs="unbounded"/>
       </xs:sequence>
-      <xs:attribute name="host" use="required" type="xs:NCName"/>
+      <xs:attribute name="host" use="required" type="xs:string"/>
       <xs:attribute name="interval" use="required" type="xs:integer"/>
-      <xs:attribute name="name" use="required" type="xs:NCName"/>
-      <xs:attribute name="output" use="required" type="xs:NCName"/>
+      <xs:attribute name="name" use="required" type="xs:string"/>
+      <xs:attribute name="output" use="required" type="xs:string"/>
       <xs:attribute name="port" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="mbean">
     <xs:complexType>
       <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="attribute"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="attribute"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="operation"/>
       </xs:sequence>
       <xs:attribute name="name" use="required" type="xs:anyURI"/>
     </xs:complexType>
@@ -41,14 +42,30 @@
       <xs:attribute name="property" use="required" type="xs:NCName"/>
     </xs:complexType>
   </xs:element>
+  <xs:element name="arg">
+    <xs:complexType>
+      <xs:attribute name="pos" use="required" type="xs:int"/>
+      <xs:attribute name="type" use="required" type="xs:string"/>
+      <xs:attribute name="value" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="operation">
+    <xs:complexType>
+    	<xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="arg"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="property" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="output">
     <xs:complexType>
       <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="item"/>
-        <xs:element minOccurs="0" ref="oper"/>
+                <xs:element minOccurs="0" ref="oper" maxOccurs="unbounded"/>
+                <xs:element maxOccurs="unbounded" ref="item"/>
       </xs:sequence>
-      <xs:attribute name="className" use="required"/>
-      <xs:attribute name="file" use="required" type="xs:NCName"/>
+      <xs:attribute name="className" use="required" type="xs:string"/>
+      <xs:attribute name="file" use="required" type="xs:string"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="item">
@@ -59,10 +76,14 @@
   </xs:element>
   <xs:element name="oper">
     <xs:complexType>
-      <xs:attribute name="arg1propertyref" use="required" type="xs:NCName"/>
-      <xs:attribute name="arg2propertyref" use="required" type="xs:NCName"/>
-      <xs:attribute name="ind" use="required" type="xs:integer"/>
-      <xs:attribute name="type" use="required" type="xs:NMTOKEN"/>
+    	<xs:attribute name="arg1propertyref" use="required"
+    		type="xs:string" />
+    	<xs:attribute name="arg2propertyref" use="required"
+    		type="xs:string" />
+    	<xs:attribute name="ind" use="required" type="xs:integer" />
+    	<xs:attribute name="property" type="xs:string"></xs:attribute>
+    	<xs:attribute name="operator" type="xs:string"></xs:attribute>
     </xs:complexType>
   </xs:element>
+
 </xs:schema>
